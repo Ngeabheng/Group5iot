@@ -1,29 +1,30 @@
 # Lab 1 - Temperature Sensor With Relay Control (Telegram)
 
 ## Overview
-In this lab, you will build a tiny IoT monitoring node with an ESP32, DHT22 temperature/humidity sensor, and a relay. The ESP32 sends Telegram alerts when the temperature rises above a threshold and lets users control the relay via chat commands. Once the temperature drops below the threshold again, the relay turns off automatically.
+In this lab, you will build a tiny IoT monitoring node with an ESP32, DHT22
+temperature/humidity sensor, and a relay. The ESP32 sends Telegram alerts when the
+temperature rises above a threshold and lets users control the relay via chat commands. Once the
+temperature drops below the threshold again, the relay turns off automatically.
 
 ## Activity Objective
-- Design and implement an IoT system using ESP32 + MicroPython (sensing, actuation, networking).
-- Apply programming techniques for periodic sampling, debouncing, and simple state machines.
-- Develop a chat-based remote control application using Telegram Bot API (HTTP requests).
-- Document and present system design, wiring, and test evidence (screenshots/video), and reflect on reliability/ethics.
-- Evaluate performance (sampling interval, rate limits) and safety (relay loads, power isolation).
-
-## Hardware
-- Microcontroller with Wi-Fi ESP32, Exstension Board
-- DHT22 temperature/humidity sensor
-- Relay module
-- Jumper wires, breadboard
+• Design & implement an IoT system using ESP32 + MicroPython (sensing, actuation,
+networking).
+• Apply programming techniques for periodic sampling, debouncing, and simple state
+machines.
+• Develop a chat-based remote control application using Telegram Bot API (HTTP
+requests).
+• Document & present system design, wiring, and test evidence (screenshots/video), and
+reflect on reliability/ethics.
+• Evaluate performance (sampling interval, rate limits) and safety (relay loads, power
+isolation)
 
 ## Equipment
-- ESP32 dev board 
-- DHT22 sensor
-- Relay module
-- Jumper wires
-- USB cable + laptop with Thonny
-- Wi-Fi access (internet)
-- Telegram Bot Token
+• ESP32 Dev Board (MicroPython firmware flashed)
+• DHT11 sensor
+• Relay module
+• jumper wires
+• USB cable + laptop with Thonny
+• Wi-Fi access (internet)
 
 ## Wiring
 This is the diagram for wiring setup with the available equipments.
