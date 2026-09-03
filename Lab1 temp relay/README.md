@@ -73,5 +73,5 @@ After /on, stop alerts. When T < 25 C, turn relay OFF automatically and send a o
 
 ## Task 5 Flowchart
 
-![flowchart](flowchart.PNG)
+![flowchart](flowchart.png)
 
