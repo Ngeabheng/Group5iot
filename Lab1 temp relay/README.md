@@ -49,15 +49,25 @@ Read DHT11 every 5 seconds and print the temperature and humidity with 2 decinma
 
 ## Task 2 - Telegram send
 
-![flowchart](task2.png)
+Implement send_message() and post a test message to your group.
 
+Task 2 Telegram output
 
+![task2](task2.png)
 
-## Flowchart
+## Task 3 - Bot Command
 
-![flowchart](task3.png)
+Implement /status to reply with current T/H and relay state.
+Implement /on and /off to control the relay.
+Bot Command Relay
+
+![task3](task3.png)
 
 ## Task 4 DEMO VIDEO 
+
+No messages while T < 25 C.
+If T >= 25 C and relay is OFF, send an alert every loop (5 s) until /on is received.
+After /on, stop alerts. When T < 25 C, turn relay OFF automatically and send a one-time "auto-OFF" notice.
 
 [DEMO VIDEO](https://youtube.com/shorts/gEKEVXU1BuM)
 
