@@ -41,11 +41,27 @@ This is the diagram for wiring setup with the available equipments.
 
 Bot token "8968694049:AAGn5cIzMF-EH8ngKmNaHyU-a46SznCzqn4"
 
+## Task 1 - Temp and humidity
+
+![task1](task1.png)
+
+Read DHT11 every 5 seconds and print the temperature and humidity with 2 decinmals.
+
+## Task 2 - Telegram send
+
+![flowchart](task2.png)
+
+
+
 ## Flowchart
+
+![flowchart](task3.png)
+
+## Task 4 DEMO VIDEO 
+
+[DEMO VIDEO](https://youtube.com/shorts/gEKEVXU1BuM)
+
+## Task 5 Flowchart
 
 ![flowchart](flowchart.PNG)
 
-## DEMO VIDEO
-
-
-[DEMO VIDEO](https://youtube.com/shorts/gEKEVXU1BuM)
