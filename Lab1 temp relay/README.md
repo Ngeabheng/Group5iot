@@ -28,7 +28,8 @@ In this lab, you will build a tiny IoT monitoring node with an ESP32, DHT22 temp
 ## Wiring
 This is the diagram for wiring setup with the available equipments.
 
-![Wiring Diagram](Wiring_Diagram.png)
+![Wiring Diagram](LAB1-Temperature-Sensor-with-Relay-Control-Telegram-/Lab1 temp relay
+/Wiring Diagram.png)
 
 ## Usage
 1. Setup the correct wire and upload the code to Thonny.
