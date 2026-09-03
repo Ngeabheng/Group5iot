@@ -41,9 +41,9 @@ This is the diagram for wiring setup with the available equipments.
 
 Bot token "8968694049:AAGn5cIzMF-EH8ngKmNaHyU-a46SznCzqn4"
 
-##Flowchart
+## Flowchart
 
-![Flowchart](flowchart.png)
+![flowchart](flowchart.PNG)
 
 
 [DEMO VIDEO](https://youtube.com/shorts/gEKEVXU1BuM)
