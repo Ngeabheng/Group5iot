@@ -66,7 +66,9 @@ Bot Command Relay
 ## Task 4 DEMO VIDEO 
 
 No messages while T < 25 C.
+
 If T >= 25 C and relay is OFF, send an alert every loop (5 s) until /on is received.
+
 After /on, stop alerts. When T < 25 C, turn relay OFF automatically and send a one-time "auto-OFF" notice.
 
 [DEMO VIDEO](https://youtube.com/shorts/gEKEVXU1BuM)
