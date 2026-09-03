@@ -1,4 +1,11 @@
 # Lab 1 - Temperature Sensor With Relay Control (Telegram)
+## Group Members
+
+-Andy Eang
+
+-Ngeabheng Chan
+
+-Sereyvattanac Na
 
 ## Overview
 In this lab, we will build a tiny IoT monitoring node with an ESP32, DHT22
