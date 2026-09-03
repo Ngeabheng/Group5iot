@@ -40,3 +40,10 @@ This is the diagram for wiring setup with the available equipments.
    - `/off` -> turns relay OFF
 
 Bot token "8968694049:AAGn5cIzMF-EH8ngKmNaHyU-a46SznCzqn4"
+
+##Flowchart
+
+![Flowchart](flowchart.png)
+
+
+[DEMO VIDEO](https://youtube.com/shorts/gEKEVXU1BuM)
