@@ -9,21 +9,30 @@ temperature drops below the threshold again, the relay turns off automatically.
 ## Activity Objective
 • Design & implement an IoT system using ESP32 + MicroPython (sensing, actuation,
 networking).
+
 • Apply programming techniques for periodic sampling, debouncing, and simple state
 machines.
+
 • Develop a chat-based remote control application using Telegram Bot API (HTTP
 requests).
+
 • Document & present system design, wiring, and test evidence (screenshots/video), and
 reflect on reliability/ethics.
+
 • Evaluate performance (sampling interval, rate limits) and safety (relay loads, power
 isolation)
 
 ## Equipment
 • ESP32 Dev Board (MicroPython firmware flashed)
+
 • DHT11 sensor
+
 • Relay module
+
 • jumper wires
+
 • USB cable + laptop with Thonny
+
 • Wi-Fi access (internet)
 
 ## Wiring
