@@ -93,7 +93,7 @@ LCD_ADDR = 0x27
 
 The web interface is a modern, single-page application with a premium dark theme design featuring:
 
-![Web Interface](./screenshot/web_interface.png)
+![Web Interface](task1.jpeg)
 
 #### **Sensors Dashboard**
 
