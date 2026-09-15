@@ -1,5 +1,14 @@
 # LAB2: IoT Webserver with LED, Sensors, LCD, and Servo Control
 
+## Group Members
+
+- Andy Eang
+
+- Ngeabheng Chan
+
+- Sereyvattanac Na
+
+
 ## 1. Overview
 
 In this lab, students will design an ESP32-based IoT system with MicroPython that integrates a
