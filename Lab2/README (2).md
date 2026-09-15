@@ -2,26 +2,22 @@
 
 ## Overview
 
-In this lab, we will design an ESP32-based IoT system with MicroPython that integrates a web interface and an LCD display. The system allows users to control an LED, read sensors, and send custom messages to the LCD through a webserver. This lab emphasizes interaction between web UI and hardware, giving students practice in event-driven IoT design.
-
-## Hardware
-
-- ESP32 Dev Board (MicroPython firmware flashed)
-- DHT11 sensor (temperature/humidity)
-- HC-SR04 ultrasonic distance sensor
-- LCD 16×2 with I²C backpack
-- LED (built-in or external on GPIO2)
-- Breadboard, jumper wires
+In this lab, students will design an ESP32-based IoT system with MicroPython that integrates a
+web interface, sensors, an LCD display, and a servo motor. The system will allow users to control
+an LED and servo, read sensors, and send custom messages to the LCD through a webserver.
+This lab emphasizes interaction between a web user interface and physical hardware, giving
+students practice in event-driven IoT design.
 
 ## Equipment
 
-- ESP32 dev board
-- DHT11 sensor
-- HC-SR04 ultrasonic distance sensor
-- LCD 16×2 with I²C backpack
-- Breadboard, jumper wires
-- USB cable + laptop with Thonny
-- Wi-Fi access
+  ESP32 Dev Board (MicroPython firmware flashed)
+• DHT11 sensor (temperature/humidity)
+• HC-SR04 ultrasonic distance sensor
+• LCD 16x2 with I2C backpack
+• SG90 servo motor
+• Breadboard and jumper wires
+• USB cable and laptop with Thonny
+• Wi-Fi access
 
 ## Wiring
 
