@@ -298,73 +298,8 @@ The final dashboard is a single-page application with a premium dark theme desig
 | `/lcd/text?msg=...`  | GET    | Display custom text on LCD (scrolls if > 16 chars) | 204 No Content                |
 | `/servo?angle=...`   | GET    | Set servo angle (0–180°)                            | `[Insert once implemented]`   |
 
-**Evidence:**
-
-![Web Interface](task1.png)
-
-[Demo Video](https://www.youtube.com/shorts/IEQe3DOmxgQ)
-
 ---
 
-### Task 6 — Documentation and Demonstration (20 pts)
-
-Submit a private GitHub repository containing:
-
-- `main.py` and all required LCD helper files
-- Wiring diagram or clear wiring photo
-- Wi-Fi and webserver setup instructions
-- Instructions for using every web page control
-- Screenshots of the completed web page and LCD
-- Demonstration video
-
-## 6. Technical Features
-
-### 🔧 Key Implementation Highlights
-
-1. **Non-Blocking Web Interface**
-   - Single-page application with no meta-refresh.
-   - Background polling using JavaScript `fetch()` API.
-   - Page remains responsive during LCD scrolling (scrolling happens on ESP32).
-
-2. **Error Handling**
-   - Sensor read failures return `None` and display "Err" on the web interface.
-   - Try-catch blocks prevent crashes from sensor errors.
-   - HTTP error handling with 500 status code fallback.
-
-3. **URL Encoding/Decoding**
-   - Custom `url_decode()` function handles special characters.
-   - Supports spaces, punctuation, and common symbols in LCD messages.
-   - JavaScript `encodeURIComponent()` ensures proper encoding.
-
-4. **LCD Helper Functions**
-   - `lcd_write()` — Clears line and writes text (max 16 chars).
-   - `lcd_scroll()` — Automatically scrolls text longer than 16 characters.
-   - Configurable scroll delay (default 0.22s per character shift).
-
-5. **Minimal Dependencies**
-   - No JSON library needed (manual JSON string construction).
-   - Lightweight HTTP server using raw sockets.
-   - Efficient memory usage for ESP32 constraints.
-
-## 7. System Architecture
-
-![System Architecture](screenshot/diagram.png)
-
-## 8. Code Structure
-
-```
-lab2-webserver-lcd-control/
-├── main.py              # Main webserver and hardware control logic
-├── README.md            # This documentation file
-└── screenshot/          # Evidence and documentation images
-    ├── wiring_setup.png
-    ├── component_setup.jpg
-    ├── task1_sensor_readings.png
-    ├── task2_lcd_sensor.jpg
-    ├── task3_servo_control.gif
-    ├── task4_custom_text.gif
-    └── system_architecture.png
-```
 
 **Main Components in `main.py`:**
 
@@ -376,40 +311,5 @@ lab2-webserver-lcd-control/
 - HTTP request handlers for all endpoints
 - Embedded HTML/CSS/JavaScript for the web interface
 
-## 9. Troubleshooting
 
-### Common Issues
 
-1. **ESP32 won't connect to Wi-Fi**
-   - Verify SSID and password are correct.
-   - Check if Wi-Fi network is 2.4GHz (ESP32 doesn't support 5GHz).
-   - Ensure Wi-Fi signal strength is adequate.
-
-2. **LCD not displaying anything**
-   - Check I²C address (try 0x27 or 0x3F).
-   - Verify SDA and SCL connections.
-   - Adjust LCD contrast potentiometer on I²C backpack.
-
-3. **Sensor readings show errors**
-   - DHT11: Ensure proper power supply and data pin connection.
-   - HC-SR04: Check trigger and echo pin connections.
-   - Add appropriate delays between sensor readings.
-
-4. **Servo not moving / jittering**
-   - Confirm the servo is powered from 5V, not 3.3V.
-   - Check the PWM frequency is set correctly for SG90 (typically 50Hz).
-   - Verify the signal wire is connected to the configured `SERVO_PIN`.
-
-5. **Web page not loading**
-   - Verify ESP32 IP address from serial monitor.
-   - Ensure device is on the same network as ESP32.
-   - Check firewall settings.
-
-## 10. Submission and Academic Integrity
-
-The demonstration video must show:
-
-- Live temperature, humidity, and distance readings
-- Temperature and distance displayed on the LCD through web buttons
-- Servo angle controlled using the web slider
-- Custom text sent from the browser to the LCD
