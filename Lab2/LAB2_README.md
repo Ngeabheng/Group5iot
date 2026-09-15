@@ -134,7 +134,7 @@ SERVO_PIN = 13
 
 **Evidence:** Screenshot showing the sensor readings on the web page.
 
-![Task 1 - Sensor Readings](task2.jpeg)
+![Task 1 - Sensor Readings](task1.png)
 
 ---
 
@@ -175,7 +175,7 @@ def lcd_write(line, text):
 
 **Evidence:** Photo showing the correct sensor values on the LCD.
 
-![Task 2 - LCD Sensor Display](screenshot/task3_result.jpg)
+![Task 2 - LCD Sensor Display](task2.jpeg)
 
 ---
 
