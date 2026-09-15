@@ -215,7 +215,7 @@ Sensor readings are implemented using:
 **Evidence:**
 
 
-![Task 2 - Sensor Readings](screenshot/task2_sensor.jpg)
+![Task 2 - Sensor Readings](task2.jpeg)
 
 ---
 
