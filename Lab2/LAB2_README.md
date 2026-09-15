@@ -197,7 +197,7 @@ def lcd_write(line, text):
 
 **Evidence:** Short video showing the web slider and servo movement.
 
-`[Insert video/GIF link here]`
+[Task 3 Video](https://youtube.com/shorts/2kuhBz8zi2s](https://youtube.com/shorts/R-5MFUHDqXk?feature=share)
 
 ---
 
@@ -252,7 +252,7 @@ def lcd_write(line, text):
 
 **Evidence:** Short video showing text sent from the browser to the LCD.
 
-[Task 4 Video](https://youtube.com/shorts/2kuhBz8zi2s)
+[Task 4 Video](https://youtube.com/shorts/2kuhBz8zi2s](https://youtube.com/shorts/8srLY0PTLNI?feature=share)
 
 ---
 
