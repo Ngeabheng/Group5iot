@@ -24,10 +24,9 @@ students practice in event-driven IoT design.
 This is the diagram for wiring setup with the available equipment.
 
 
-![Wiring Diagram](wiring.jpeg)
-
-
 ![Component Setup](diagram.png)
+
+![Wiring Diagram](wiring.jpeg)
 
 ### Pin Connections
 
