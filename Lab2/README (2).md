@@ -10,14 +10,14 @@ students practice in event-driven IoT design.
 
 ## Equipment
 
--ESP32 Dev Board (MicroPython firmware flashed)
--DHT11 sensor (temperature/humidity)
--HC-SR04 ultrasonic distance sensor
--LCD 16x2 with I2C backpack
--SG90 servo motor
--Breadboard and jumper wires
--USB cable and laptop with Thonny
--Wi-Fi access
+   -ESP32 Dev Board (MicroPython firmware flashed) 
+   -DHT11 sensor (temperature/humidity)
+   -HC-SR04 ultrasonic distance sensor
+   -LCD 16x2 with I2C backpack
+   -SG90 servo motor
+   -Breadboard and jumper wires
+   -USB cable and laptop with Thonny
+   -Wi-Fi access
 
 ## Wiring
 
