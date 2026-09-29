@@ -183,36 +183,6 @@ else:
 
 **Objective:** Add a 0–180° Blynk slider that drives the servo, with the selected angle shown in the app.
 
-```python
-from machine import Pin, PWM
-import urequests as requests
-
-servo = PWM(Pin(13), freq=50)
-
-def set_angle(angle):
-    duty = int((angle / 180) * 102 + 26)
-    servo.duty(duty)
-
-def read_slider_v1():
-    url = f"{BLYNK_API}/get?token={BLYNK_TOKEN}&v1"
-    try:
-        r = requests.get(url)
-        value = int(str(r.text).strip('[]"'))
-        r.close()
-        return value
-    except Exception as e:
-        print("Failed to read slider:", e)
-        return None
-```
-
-```python
-# In main loop
-angle = read_slider_v1()
-if angle is not None and angle != last_angle:
-    angle = max(0, min(180, angle))
-    set_angle(angle)
-    last_angle = angle
-```
 
 **Evidence:** Short video of the slider driving the servo.
 
@@ -224,38 +194,6 @@ if angle is not None and angle != last_angle:
 
 **Objective:** Open the gate automatically on a new IR detection, hold briefly, then close — firing once per new detection rather than repeatedly while the object stays in range.
 
-```python
-def auto_open_servo():
-    print("Auto opening servo")
-    set_angle(SERVO_OPEN)
-    time.sleep(AUTO_DELAY)
-    print("Closing servo")
-    set_angle(SERVO_CLOSED)
-```
-
-```python
-# In main loop
-if not manual_override:
-    current = ir.value()
-    if current != prev_state:
-        if current == 0:
-            print("Detected")
-            send_ir_status("Detected")
-
-            # Increment counter
-            ir_counter += 1
-            display_counter(ir_counter)
-            send_counter_v2(ir_counter)
-
-            # Automatic servo
-            auto_open_servo()
-        else:
-            send_ir_status("Not%20Detected")
-        prev_state = current
-```
-
-The `current != prev_state` check is what keeps the gate from re-triggering while the same object is still sitting in the detection zone.
-
 **Evidence:** Short video of the automatic open/close cycle.
 
 [Task 3 - Automatic Gate Video](https://youtu.be/lWB2sb4-MdY)
@@ -265,40 +203,6 @@ The `current != prev_state` check is what keeps the gate from re-triggering whil
 ### Task 4 — TM1637 Detection Counter (15 pts)
 
 **Objective:** Count each new detection event and keep the TM1637 and Blynk's numeric widget in sync.
-
-```python
-import tm1637
-from machine import Pin
-import urequests as requests
-
-tm = tm1637.TM1637(Pin(17), Pin(16))
-tm.set_brightness(7)  # 0-7
-
-def display_counter(value):
-    try:
-        tm.show_number(value)
-    except Exception as e:
-        print("TM1637 display error:", e)
-
-def send_counter_v2(counter):
-    url = f"{BLYNK_API}/update?token={BLYNK_TOKEN}&V2={counter}"
-    try:
-        r = requests.get(url)
-        r.close()
-    except:
-        print("HTTP Error (Counter)")
-```
-
-```python
-ir_counter = 0
-
-# In IR detection handler
-if current == 0:
-    ir_counter += 1
-    print("IR Count:", ir_counter)
-    display_counter(ir_counter)
-    send_counter_v2(ir_counter)
-```
 
 **Evidence:** Short video showing matching TM1637/Blynk counts.
 
@@ -312,39 +216,6 @@ if current == 0:
 
 - **OFF (Automatic):** the IR sensor drives the gate, per Task 3.
 - **ON (Manual):** IR input is ignored; the servo follows the Blynk slider (V1) instead, per Task 2.
-
-```python
-def read_manual_override_v3():
-    """Read Blynk switch for manual override (0 = automatic, 1 = manual)"""
-    url = f"{BLYNK_API}/get?token={BLYNK_TOKEN}&v3"
-    try:
-        r = requests.get(url)
-        val = int(str(r.text).strip('[]"'))
-        r.close()
-        return val == 1  # True if manual override active
-    except Exception as e:
-        print("Failed to read manual override:", e)
-        return False
-```
-
-```python
-# In main loop
-manual_override = read_manual_override_v3()
-
-if not manual_override:
-    # Automatic mode - IR sensor controls the servo
-    current = ir.value()
-    if current != prev_state:
-        if current == 0:
-            auto_open_servo()
-        prev_state = current
-else:
-    # Manual override active - IR ignored, slider controls the servo
-    prev_state = -1
-    print("Manual override active - IR ignored")
-```
-
-Because the IR handler, servo control, counter, and TM1637 update all live in the same loop, this task is really the previous four running together behind a single mode switch — nothing new to build beyond the `manual_override` gate shown above.
 
 **Evidence:** Video showing the system working in both modes.
 
