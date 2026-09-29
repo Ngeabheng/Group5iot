@@ -195,7 +195,7 @@ AUTO_DELAY = 1      # Time to hold the gate open (seconds)
 
 **Evidence:** Video showing the system working in both modes.
 
-[Task 5 - Manual Override Demo](https://youtube.com/shorts/_8cbKmmfn3Y?feature=share)
+[Task 5 - Manual Override Demo](https://youtube.com/shorts/VPBxF9oA0zo)
 
 ---
 
