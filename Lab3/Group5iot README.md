@@ -151,7 +151,7 @@ AUTO_DELAY = 1      # Time to hold the gate open (seconds)
 
 **Evidence:** Screenshot of the IR status showing on Blynk.
 
-![Task 1 - IR Sensor Status](./screenshot/task1.jpg)
+![Task 1 - IR Sensor Status](task1.png)
 
 ---
 
