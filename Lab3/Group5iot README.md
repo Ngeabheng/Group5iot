@@ -210,3 +210,5 @@ AUTO_DELAY = 1      # Time to hold the gate open (seconds)
 ### Flow Chart
 
 ![Flow Chart](flowchart.PNG)
+
+---
