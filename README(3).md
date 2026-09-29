@@ -258,7 +258,7 @@ The `current != prev_state` check is what keeps the gate from re-triggering whil
 
 **Evidence:** Short video of the automatic open/close cycle.
 
-[Task 3 - Automatic Gate Video](https://youtube.com/shorts/UL46Ju1LQi8)
+[Task 3 - Automatic Gate Video](https://youtu.be/lWB2sb4-MdY)
 
 ---
 
