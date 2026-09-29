@@ -1,67 +1,52 @@
-# Lab 3 - IoT Smart Gate Control with Blynk, IR Sensor, Servo Motor, and TM1637
+# Lab 3 – IoT Smart Gate Control with Blynk, IR Sensor, Servo Motor, and TM1637
 
 ## Overview
 
-In this lab, we will design and implement an ESP32-based IoT system using MicroPython and the Blynk platform. The system integrates an IR sensor for object detection, a servo motor for physical actuation, and a TM1637 7-segment display for real-time local feedback. We will use the Blynk mobile application to remotely control the system, monitor sensor status, and observe system behavior.
+This lab implements an ESP32-based smart gate system in MicroPython, built around the Blynk cloud platform. An IR obstacle sensor detects approaching objects, an SG90 servo physically drives the gate, and a TM1637 4-digit display shows detection activity locally. The Blynk app mirrors sensor status, exposes a manual slider for the servo, and lets the operator flip between automatic and manual control.
+
+The project ties together sensing, actuation, cloud dashboards, and a local display into a single event-driven control loop.
 
 ## Learning Outcomes (CLO Alignment)
 
-- Integrate multiple sensors and actuators into a single IoT system using ESP32
-- Use Blynk to remotely control hardware and visualize system status
-- Implement automatic and manual control logic based on sensor input and cloud commands
-- Display system status and numerical data using a TM1637 7-segment display
-- Document system wiring, logic flow, and IoT behavior clearly
-
-## Hardware
-
-- ESP32 Dev Board (MicroPython firmware flashed)
-- IR Sensor Module (digital output)
-- Servo Motor (SG90 or similar)
-- TM1637 4-Digit 7-Segment Display
-- Breadboard, jumper wires
-- USB cable + laptop with Thonny
-- Smartphone with Blynk app installed
+- Read an IR sensor and reflect its detection status on Blynk.
+- Drive a servo motor from a Blynk slider.
+- Trigger automatic gate opening/closing from IR detection events.
+- Track detection counts and mirror the value on both TM1637 and Blynk.
+- Support both automatic and manual operating modes.
+- Document the wiring, dashboard layout, and system behavior.
 
 ## Equipment
 
-- ESP32 dev board
-- IR sensor module
-- Servo motor (SG90)
-- TM1637 7-segment display
-- Breadboard, jumper wires
-- USB cable + laptop with Thonny
-- Wi-Fi access
-- Smartphone (iOS/Android) with Blynk app
+- ESP32 development board (MicroPython firmware flashed)
+- IR obstacle detection sensor
+- SG90 servo motor
+- TM1637 4-digit 7-segment display
+- Breadboard and jumper wires
+- USB cable and laptop with Thonny
+- Wi-Fi access and a Blynk account (mobile app, iOS/Android)
 
 ## Wiring
-
-This is the diagram for wiring setup with the available equipment.
 
 ![Component Setup](./screenshot/component.png)
 
 ### Pin Connections
 
 | Component     | ESP32 Pin | Description                        |
-| ------------- | --------- | ---------------------------------- |
-| IR Sensor VCC | 3.3V      | Power supply for IR sensor         |
+| -------------- | --------- | ------------------------------------ |
+| IR Sensor VCC | 5V        | Power supply for IR sensor         |
 | IR Sensor GND | GND       | Ground                             |
 | IR Sensor OUT | GPIO12    | Digital output (LOW when detected) |
-| Servo VCC     | 5V        | Power supply for servo motor       |
-| Servo GND     | GND       | Ground                             |
-| Servo Signal  | GPIO13    | PWM control signal                 |
-| TM1637 VCC    | 3.3V      | Power supply for display           |
+| Servo Signal  | GPIO13    | PWM control signal (yellow wire)   |
+| Servo VCC     | 5V        | Power supply for servo (red wire)  |
+| Servo GND     | GND       | Ground (brown wire)                |
+| TM1637 VCC    | 5V        | Power supply for display           |
 | TM1637 GND    | GND       | Ground                             |
 | TM1637 CLK    | GPIO17    | Clock signal                       |
 | TM1637 DIO    | GPIO16    | Data I/O signal                    |
 
 ## Configuration
 
-These are the main configuration settings to run all the tasks in this activity.
-
-- Blynk authentication token
-- Wi-Fi SSID and password
-- GPIO pin assignments
-- Servo angle limits
+Settings needed to run every task in this lab:
 
 ```python
 # Blynk Configuration
@@ -81,130 +66,88 @@ TM_DIO = 16
 # Servo Configuration
 SERVO_CLOSED = 0    # Closed position (degrees)
 SERVO_OPEN = 90     # Open position (degrees)
-AUTO_DELAY = 1      # Time to keep gate open (seconds)
+AUTO_DELAY = 1      # Time to hold the gate open (seconds)
 ```
 
 ## Setup Instructions
 
 ### 1. Blynk Setup
 
-1. Download and install the Blynk app from App Store (iOS) or Google Play (Android)
-2. Create a new Blynk account or log in
-3. Create a new project:
+1. Install the Blynk app (App Store or Google Play) and sign in or create an account.
+2. Create a new project:
    - Project name: "Smart Gate Control"
    - Device: ESP32
    - Connection type: Wi-Fi
-4. Copy the **Auth Token** sent to your email
-5. Add the following widgets to your dashboard:
-   - **Label Widget** (Virtual Pin V0) - IR Sensor Status (displays "Detected" or "Not Detected")
-   - **Slider Widget** (Virtual Pin V1) - Manual Servo Control (0-180)
-   - **Value Display** (Virtual Pin V2) - Detection Counter
-   - **Switch Widget** (Virtual Pin V3) - Manual Override Mode
+3. Copy the **Auth Token** emailed to you.
+4. Add these widgets to the dashboard:
+   - **Label** (V0) – IR sensor status ("Detected" / "Not Detected")
+   - **Slider** (V1) – Manual servo control (0–180°)
+   - **Value Display** (V2) – Detection counter
+   - **Switch** (V3) – Automatic / Manual mode toggle
 
 ### 2. ESP32 Setup
 
-1. Flash MicroPython firmware to ESP32 (if not already done)
-2. Wire all components according to the wiring diagram above
-3. Download the required library file:
-   - `tm1637.py` - TM1637 display driver [GitHub](https://github.com/mcauser/micropython-tm1637)
-4. Update the configuration in `Lab3_Main.py` with your credentials:
+1. Flash MicroPython onto the ESP32 (if not already done).
+2. Wire the components per the diagram above.
+3. Grab the display driver: `tm1637.py` ([GitHub](https://github.com/mcauser/micropython-tm1637)).
+4. Fill in your credentials in `Lab3_Main.py`:
    ```python
    BLYNK_TOKEN = "YourAuthTokenFromEmail"
    WIFI_SSID = "YOUR_WIFI_SSID"
    WIFI_PASS = "YOUR_WIFI_PASSWORD"
    ```
-5. Upload all files to ESP32 using Thonny:
-   - `Lab3_Main.py`
-   - `tm1637.py`
-6. Reset the ESP32 or run `Lab3_Main.py`
-7. Check the serial monitor for connection status
-8. Open the Blynk app and verify the connection
+5. Upload `Lab3_Main.py` and `tm1637.py` to the ESP32 via Thonny.
+6. Reset the board (or run the script) and watch the serial monitor for the connection status.
+7. Open Blynk and confirm the device comes online.
 
 ## Usage
 
-### Blynk Dashboard Features
+### Blynk Dashboard
 
-The Blynk mobile app provides remote monitoring and control:
+**Monitoring**
+- **IR Status (V0)** – flips between "Detected" and "Not Detected" in real time.
+- **Detection Counter (V2)** – running total of detection events, mirrored from the TM1637.
 
-
-#### **Monitoring Widgets**
-
-1. **IR Sensor Status (Label Widget - V0)**
-   - Displays "Detected" when object is detected
-   - Displays "Not Detected" when no object is present
-   - Updates in real-time
-
-2. **Detection Counter (Value Display - V2)**
-   - Shows total number of detection events
-   - Syncs with TM1637 display
-   - Resets on ESP32 restart
-
-#### **Control Widgets**
-
-1. **Manual Servo Control (Slider - V1)**
-   - Range: 0° to 180°
-   - Drag slider to set servo position
-   - Works only when manual mode is enabled
-   - Real-time servo movement
-
-2. **Manual Override Switch (Switch - V3)**
-   - OFF: Automatic mode (IR sensor controls servo)
-   - ON: Manual mode (IR sensor ignored, slider controls servo)
+**Controls**
+- **Servo Slider (V1)** – 0°–180°, only takes effect while manual mode is active.
+- **Mode Switch (V3)** – OFF = automatic (IR drives the gate), ON = manual (slider drives the gate, IR ignored).
 
 ### Local Display (TM1637)
 
-The 4-digit 7-segment display shows:
-
-- **Detection counter** - Number of times IR sensor detected an object
-- **Leading zeros** - Padded for clarity (e.g., "0042")
-- **Brightness** - Adjustable in code (0-7)
+- Shows the running detection count, zero-padded (e.g. `0042`).
+- Brightness is adjustable in code (0–7).
 
 ### System Behavior
 
-#### Automatic Mode (Default)
+**Automatic mode (default)**
+1. IR sensor is polled continuously.
+2. On a new detection:
+   - Servo swings to `SERVO_OPEN` (90°).
+   - Counter increments; TM1637 and Blynk (V2) both update.
+   - IR status label (V0) shows "Detected".
+3. After `AUTO_DELAY` seconds, the servo returns to `SERVO_CLOSED` (0°).
+4. System is ready for the next detection.
 
-1. IR sensor continuously monitors for objects
-2. When object detected:
-   - Servo rotates to OPEN position (90°)
-   - Counter increments by 1
-   - TM1637 display updates
-   - Blynk counter updates
-   - IR status label shows "Detected"
-3. After 1 second delay:
-   - Servo returns to CLOSED position (0°)
-4. System ready for next detection
+**Manual mode**
+1. Operator flips the mode switch (V3) on.
+2. IR readings are ignored — no counting, no auto-open.
+3. Servo position tracks the slider (V1) directly.
+4. TM1637 holds its last counted value.
 
-#### Manual Mode
-
-1. User enables manual override switch on Blynk
-2. IR sensor readings are ignored
-3. User controls servo position via slider (0-180°)
-4. Counter does not increment
-5. TM1637 shows last counter value
-
-## API / Virtual Pins
-
-The ESP32 communicates with Blynk using virtual pins:
+## Virtual Pin Map
 
 | Virtual Pin | Type   | Direction | Description                                    |
-| ----------- | ------ | --------- | ---------------------------------------------- |
-| V0          | String | ESP → App | IR sensor status ("Detected" / "Not Detected") |
-| V1          | Slider | App → ESP | Manual servo position (0-180)                  |
-| V2          | Value  | ESP → App | Detection counter                              |
-| V3          | Switch | App → ESP | Manual override mode (0=auto, 1=manual)        |
+| ----------- | ------ | --------- | ------------------------------------------------ |
+| V0          | String | ESP → App | IR status ("Detected" / "Not Detected")         |
+| V1          | Slider | App → ESP | Manual servo angle (0–180)                      |
+| V2          | Value  | ESP → App | Detection counter                               |
+| V3          | Switch | App → ESP | Mode select (0 = automatic, 1 = manual)         |
 
-## Tasks & Checkpoints
+## Tasks and Checkpoints
 
-### Task 1 - IR Sensor Reading
+### Task 1 — IR Sensor Monitoring (15 pts)
 
-**Objective:** Read IR sensor digital output using ESP32 and display IR status (Detected / Not Detected) on Blynk.
-
-**Implementation:**
-
-The IR sensor module outputs a digital signal:
-
-- **LOW (0)** when object is detected
-- **HIGH (1)** when no object is present
+**Objective:** Read the IR sensor's digital output and reflect its status on Blynk, updating only when the state changes.
 
 ```python
 from machine import Pin
@@ -221,8 +164,6 @@ def send_ir_status(status):
         print("HTTP Error (IR)")
 ```
 
-The status is sent to Blynk via HTTP API on Virtual Pin V0:
-
 ```python
 # In main loop
 current = ir.value()
@@ -232,25 +173,21 @@ else:
     send_ir_status("Not%20Detected")
 ```
 
-**Evidence:**
+**Evidence:** Screenshot of the IR status showing on Blynk.
 
 ![Task 1 - IR Sensor Status](./screenshot/task1.jpg)
 
 ---
 
-### Task 2 - Servo Motor Control via Blynk
+### Task 2 — Blynk-Controlled Servo (15 pts)
 
-**Objective:** Add a Blynk Slider widget to control servo position. Slider position from 0 to 180 degrees and the servo moves following the slider.
-
-**Implementation:**
-
-Servo control is implemented using PWM:
+**Objective:** Add a 0–180° Blynk slider that drives the servo, with the selected angle shown in the app.
 
 ```python
 from machine import Pin, PWM
 import urequests as requests
 
-servo = machine.PWM(Pin(13), freq=50)
+servo = PWM(Pin(13), freq=50)
 
 def set_angle(angle):
     duty = int((angle / 180) * 102 + 26)
@@ -268,8 +205,6 @@ def read_slider_v1():
         return None
 ```
 
-The main loop continuously reads the slider value:
-
 ```python
 # In main loop
 angle = read_slider_v1()
@@ -279,19 +214,15 @@ if angle is not None and angle != last_angle:
     last_angle = angle
 ```
 
-**Evidence:**
+**Evidence:** Short video of the slider driving the servo.
 
 [Task 2 - Servo Control Video](https://youtu.be/JnMRalt_NaY)
 
 ---
 
-### Task 3 - Automatic IR-Servo Action
+### Task 3 — Automatic IR Gate Operation (15 pts)
 
-**Objective:** When IR sensor detects an object, servo opens automatically. After a short delay, servo returns to closed position.
-
-**Implementation:**
-
-The automatic gate logic runs in the main loop:
+**Objective:** Open the gate automatically on a new IR detection, hold briefly, then close — firing once per new detection rather than repeatedly while the object stays in range.
 
 ```python
 def auto_open_servo():
@@ -300,7 +231,9 @@ def auto_open_servo():
     time.sleep(AUTO_DELAY)
     print("Closing servo")
     set_angle(SERVO_CLOSED)
+```
 
+```python
 # In main loop
 if not manual_override:
     current = ir.value()
@@ -321,28 +254,25 @@ if not manual_override:
         prev_state = current
 ```
 
-**Evidence:**
+The `current != prev_state` check is what keeps the gate from re-triggering while the same object is still sitting in the detection zone.
+
+**Evidence:** Short video of the automatic open/close cycle.
 
 [Task 3 - Automatic Gate Video](https://youtube.com/shorts/UL46Ju1LQi8)
 
 ---
 
-### Task 4 - TM1637 Display Integration
+### Task 4 — TM1637 Detection Counter (15 pts)
 
-**Objective:** Count the number of IR detection events. Display the counter value on the TM1637 display and send the same value to Blynk numeric display widget.
-
-**Implementation:**
-
-TM1637 display initialization and update:
+**Objective:** Count each new detection event and keep the TM1637 and Blynk's numeric widget in sync.
 
 ```python
 import tm1637
 from machine import Pin
 import urequests as requests
 
-# Initialize TM1637
 tm = tm1637.TM1637(Pin(17), Pin(16))
-tm.set_brightness(7)  # Set brightness (0-7)
+tm.set_brightness(7)  # 0-7
 
 def display_counter(value):
     try:
@@ -359,8 +289,6 @@ def send_counter_v2(counter):
         print("HTTP Error (Counter)")
 ```
 
-Counter increments on each detection:
-
 ```python
 ir_counter = 0
 
@@ -372,19 +300,18 @@ if current == 0:
     send_counter_v2(ir_counter)
 ```
 
-**Evidence:**
+**Evidence:** Short video showing matching TM1637/Blynk counts.
 
 [Task 4 - TM1637 Display](https://youtube.com/shorts/E_47fxhAMRg)
 
 ---
 
-### Task 5 - Manual Override Mode
+### Task 5 — Complete Smart Gate Integration (20 pts)
 
-**Objective:** Add a Blynk switch to enable/disable automatic IR mode. When manual mode is active, IR sensor is ignored.
+**Objective:** Merge Tasks 1–4 into a single program and dashboard, add a Blynk switch (V3) to pick Automatic vs. Manual mode, and keep IR status and the detection counter visible on Blynk at all times.
 
-**Implementation:**
-
-Manual override is controlled by a Blynk switch on Virtual Pin V3:
+- **OFF (Automatic):** the IR sensor drives the gate, per Task 3.
+- **ON (Manual):** IR input is ignored; the servo follows the Blynk slider (V1) instead, per Task 2.
 
 ```python
 def read_manual_override_v3():
@@ -400,71 +327,54 @@ def read_manual_override_v3():
         return False
 ```
 
-The main loop checks the mode before processing IR sensor:
-
 ```python
 # In main loop
-manual_override = read_manual_override_v3()  # True if manual mode
+manual_override = read_manual_override_v3()
 
 if not manual_override:
-    # Automatic mode - IR sensor controls servo
+    # Automatic mode - IR sensor controls the servo
     current = ir.value()
     if current != prev_state:
         if current == 0:
-            # Handle detection
             auto_open_servo()
         prev_state = current
 else:
-    # Manual override active - IR ignored
+    # Manual override active - IR ignored, slider controls the servo
     prev_state = -1
     print("Manual override active - IR ignored")
 ```
 
-**Evidence:**
+Because the IR handler, servo control, counter, and TM1637 update all live in the same loop, this task is really the previous four running together behind a single mode switch — nothing new to build beyond the `manual_override` gate shown above.
+
+**Evidence:** Video showing the system working in both modes.
 
 [Task 5 - Manual Override Demo](https://youtube.com/shorts/_8cbKmmfn3Y?feature=share)
 
 ---
 
-**Demo Video:** [YouTube Link](https://youtube.com/shorts/9V-JWfi_ZXU)
+### Task 6 — Documentation and Demonstration (20 pts)
 
----
+Submit a private GitHub repository containing:
+
+- `Lab3_Main.py` and any required helper files (e.g. `tm1637.py`)
+- A wiring diagram or clear wiring photo
+- Wi-Fi and Blynk setup instructions, including the virtual pin mapping
+- Usage instructions for each Blynk widget
+- Screenshots of the completed Blynk dashboard
+- A demonstration video
+
+**Demo Video:** [YouTube Link](https://youtube.com/shorts/9V-JWfi_ZXU)
 
 ## Technical Features
 
-### **Key Implementation Highlights**
+### Key Implementation Highlights
 
-1. **HTTP API Integration**
-   - Blynk HTTP API for cloud communication using urequests
-   - Polling-based architecture for reading virtual pins
-   - RESTful API calls for updating sensor status and counter
-
-2. **State Management**
-   - `manual_override` flag for mode switching
-   - `prev_state` to detect IR sensor state changes
-   - `ir_counter` persistent counter
-   - `last_angle` to prevent redundant servo movements
-
-3. **PWM Servo Control**
-   - 50Hz frequency for standard servo motors
-   - Duty cycle calculation for precise angle control (0-180°)
-   - Automatic open/close sequence with configurable delay
-
-4. **TM1637 Display Driver**
-   - 4-digit 7-segment display with brightness control
-   - Direct number display using `show_number()` method
-   - Real-time counter updates
-
-5. **Blynk Integration**
-   - HTTP GET requests for reading slider and switch values
-   - HTTP GET requests for updating status and counter
-   - Virtual pin mapping for sensors and actuators
-   - Mobile app dashboard for remote monitoring
-
-6. **Error Handling**
-   - Wi-Fi connection timeout logic
-   - Try-except blocks for HTTP requests
-   - Graceful handling of API failures
+1. **HTTP API Integration** — Blynk's HTTP API via `urequests`; polling-based reads of virtual pins, RESTful updates for status/counter.
+2. **State Management** — `manual_override` for mode switching, `prev_state` for IR edge detection, `ir_counter` as a persistent count, `last_angle` to avoid redundant servo writes.
+3. **PWM Servo Control** — 50 Hz signal, duty-cycle mapping across 0–180°, automatic open/close with a configurable delay.
+4. **TM1637 Driver** — brightness control plus direct `show_number()` updates.
+5. **Blynk Integration** — HTTP GET for reading slider/switch state, HTTP GET for pushing status/counter updates, full virtual pin mapping, mobile dashboard.
+6. **Error Handling** — Wi-Fi connection timeout logic, try/except around every HTTP call, graceful degradation on API failure.
 
 ## System Architecture
 
@@ -501,55 +411,63 @@ else:
     └────────┘    └─────────┘    └────────┘    └─────────┘
 ```
 
-
-**Main Components in `Lab3_Main.py`:**
+**Main components of `Lab3_Main.py`:**
 
 - Wi-Fi connection setup
-- Blynk HTTP API integration using urequests
-- IR sensor reading function
-- Servo motor control with PWM
+- Blynk HTTP API integration via `urequests`
+- IR sensor read function
+- PWM-based servo control
 - TM1637 display update function
-- HTTP API functions for reading/writing virtual pins
+- Virtual pin read/write helpers
 - Automatic gate control logic
-- Manual override mode handling
+- Manual override handling
 - Main event loop
 
 ## Troubleshooting
 
-### Common Issues
-
 1. **ESP32 won't connect to Blynk**
-   - Verify Auth Token is correct (check email)
-   - Ensure Wi-Fi credentials are correct
-   - Check if ESP32 is connected to Wi-Fi (serial monitor)
-   - Verify Blynk server is accessible (blynk.cloud)
+   - Confirm the auth token (check your email).
+   - Double-check Wi-Fi credentials and confirm the ESP32 associated (serial monitor).
+   - Confirm `blynk.cloud` is reachable from your network.
 
 2. **Servo not moving**
-   - Check power supply (servo needs 5V, not 3.3V)
-   - Verify PWM signal wire connection to GPIO14
-   - Test with manual slider control first
-   - Check servo duty cycle values (26-128 for SG90)
+   - Servos need 5V, not 3.3V — check the power rail.
+   - Confirm the signal wire is on **GPIO13**.
+   - Test with the manual slider first to isolate wiring vs. logic issues.
+   - Verify the duty-cycle range (roughly 26–128 for SG90).
 
 3. **IR sensor not detecting**
-   - Adjust sensor sensitivity potentiometer
-   - Check if sensor LED lights up when object is near
-   - Verify sensor output is connected to GPIO13
-   - Test sensor output with multimeter (should be LOW when detected)
+   - Adjust the sensitivity potentiometer on the module.
+   - Confirm the onboard LED lights when an object is near.
+   - Confirm the output is wired to **GPIO12**.
+   - Probe with a multimeter — output should go LOW on detection.
 
-4. **TM1637 display not showing numbers**
-   - Check CLK and DIO connections (GPIO18, GPIO19)
-   - Verify power supply (3.3V or 5V depending on module)
-   - Test with simple display code first
-   - Adjust brightness level in code
+4. **TM1637 not displaying numbers**
+   - Confirm CLK is on **GPIO17** and DIO is on **GPIO16**.
+   - Check the module's power requirement (3.3V or 5V, depending on the board).
+   - Run a minimal display test to isolate driver issues.
+   - Adjust brightness in code if the digits look faint.
 
 5. **Counter not incrementing**
-   - Check if automatic mode is enabled (switch OFF on Blynk)
-   - Verify IR sensor is working
-   - Add debug print statements to detection handler
-   - Check if `detection_count` variable is being updated
+   - Make sure automatic mode is active (switch OFF on Blynk).
+   - Confirm the IR sensor itself is working.
+   - Add print statements inside the detection handler.
+   - Verify `ir_counter` is actually being updated in that branch.
 
 6. **Blynk widgets not updating**
-   - Ensure `blynk.run()` is called in main loop
-   - Check virtual pin numbers match widget configuration
-   - Verify ESP32 is connected to Blynk (check app status)
-   - Add delay between `blynk.run()` calls (recommended 50-100ms)
+   - Confirm the main loop is actually running and not stuck.
+   - Double-check virtual pin numbers match the widget configuration.
+   - Confirm the device shows "online" in the Blynk app.
+   - Add a small delay (50–100ms) between API calls to avoid throttling.
+
+## Submission and Academic Integrity
+
+The demonstration video must show:
+
+- Live IR sensor status displayed on Blynk
+- Servo angle controlled using the Blynk slider
+- Automatic gate opening and closing when an object is detected
+- Matching detection counts on TM1637 and Blynk
+- Automatic/Manual mode switching and manual override
+
+All submitted work must be original. Do not share or copy another student's complete source code, and do not publish Wi-Fi passwords or Blynk authentication tokens in the repository.
