@@ -149,30 +149,6 @@ AUTO_DELAY = 1      # Time to hold the gate open (seconds)
 
 **Objective:** Read the IR sensor's digital output and reflect its status on Blynk, updating only when the state changes.
 
-```python
-from machine import Pin
-import urequests as requests
-
-ir = Pin(12, Pin.IN)
-
-def send_ir_status(status):
-    url = f"{BLYNK_API}/update?token={BLYNK_TOKEN}&V0={status}"
-    try:
-        r = requests.get(url)
-        r.close()
-    except:
-        print("HTTP Error (IR)")
-```
-
-```python
-# In main loop
-current = ir.value()
-if current == 0:
-    send_ir_status("Detected")
-else:
-    send_ir_status("Not%20Detected")
-```
-
 **Evidence:** Screenshot of the IR status showing on Blynk.
 
 ![Task 1 - IR Sensor Status](./screenshot/task1.jpg)
