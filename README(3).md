@@ -302,7 +302,7 @@ if current == 0:
 
 **Evidence:** Short video showing matching TM1637/Blynk counts.
 
-[Task 4 - TM1637 Display](https://youtube.com/shorts/E_47fxhAMRg)
+[Task 4 - TM1637 Display](https://youtu.be/8X-VD4OeShQ)
 
 ---
 
