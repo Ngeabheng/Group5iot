@@ -1,5 +1,13 @@
 # Lab 3 – IoT Smart Gate Control with Blynk, IR Sensor, Servo Motor, and TM1637
 
+## Group Members
+
+- Andy Eang
+
+- Ngeabheng Chan
+
+- Sereyvattanac Na
+
 ## Overview
 
 This lab implements an ESP32-based smart gate system in MicroPython, built around the Blynk cloud platform. An IR obstacle sensor detects approaching objects, an SG90 servo physically drives the gate, and a TM1637 4-digit display shows detection activity locally. The Blynk app mirrors sensor status, exposes a manual slider for the servo, and lets the operator flip between automatic and manual control.
