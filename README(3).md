@@ -216,7 +216,7 @@ if angle is not None and angle != last_angle:
 
 **Evidence:** Short video of the slider driving the servo.
 
-[Task 2 - Servo Control Video](https://youtu.be/JnMRalt_NaY)
+[Task 2 - Servo Control Video](https://youtu.be/yRJPqdlkav8)
 
 ---
 
