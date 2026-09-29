@@ -27,7 +27,7 @@ The project ties together sensing, actuation, cloud dashboards, and a local disp
 
 ## Wiring
 
-![Component Setup](Lab3/wiring.png)
+![Component Setup](wiring.png)
 
 ### Pin Connections
 
