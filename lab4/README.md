@@ -255,7 +255,7 @@ gas_avg = calculate_moving_average(gas_raw)
 print("Raw ADC:", gas_raw, "| Moving Avg:", gas_avg)
 ```
 
-![Task 1 Evidence](./screenshot/task1.jpg)
+![Task 1 Evidence](task1.png)
 
 ---
 
@@ -286,8 +286,8 @@ risk_level = classify_gas_risk(gas_avg)
 print("Evaluated Risk Level:", risk_level)
 ```
 
-![Task 2 SAFE](./screenshot/task2_1.png)
-![Task 2 WARNING/DANGER](./screenshot/task2_2.png)
+![Task 2](task2.png)
+
 
 ---
 
@@ -317,7 +317,7 @@ fever_flag = detect_fever(body_temp)
 print("Body Temp:", body_temp, "°C | Fever Flag:", fever_flag)
 ```
 
-![Task 3 Evidence](./screenshot/task3.png)
+![Task 3 Evidence](task3.png)
 
 ---
 
@@ -373,13 +373,10 @@ response.close()
 | **5** | Altitude Graph | Time Series | `altitude` | `SELECT mean("altitude") FROM "sensor_readings" WHERE $timeFilter GROUP BY time($__interval)` |
 | **6** | Room Temperature | Gauge / Stat | `room_temp` | `SELECT last("room_temp") FROM "sensor_readings" WHERE $timeFilter` |
 
-![Node-RED Ingest Pipeline](./screenshot/task4.png)
-![InfluxDB Time Series Verification](./screenshot/influx_db.png)
-![Complete Grafana Dashboard UI](./screenshot/grafana_dashboard.png)
 
-[Watch Video Demonstration](https://youtu.be/JF9yqdEX5WU)
+![Complete Grafana Dashboard UI](task4.png)
 
----
+
 
 ## 7. Technical Features & Highlights
 
@@ -390,18 +387,4 @@ response.close()
 
 ---
 
-## 8. Submission & Academic Integrity
 
-### Required Deliverables Checklist
-
-- [ ] `main.py` (Complete MicroPython source code executed on ESP32)
-- [ ] System Flowchart Diagram
-- [ ] Node-RED Flow Export File (`.json`)
-- [ ] Screenshot of InfluxDB Data Verification
-- [ ] Screenshot of Complete Grafana Dashboard
-- [ ] `README.md` (System documentation detailing logic and configuration)
-- [ ] Demonstration Video (60–90 seconds duration showcasing physical setup & live dashboard)
-
-### Academic Integrity Notice
-
-> All submitted code, circuit diagrams, and dashboard configurations must represent original student work. Code sharing, direct plagiarizing of peer repositories, or unauthorized asset copying is strictly prohibited under institutional policy.
