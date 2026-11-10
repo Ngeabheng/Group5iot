@@ -1,5 +1,14 @@
 # Lab 4: Multi-Sensor IoT Monitoring with Grafana Dashboard
 
+## Group Members
+
+- Andy Eang
+
+- Ngeabheng Chan
+
+- Sereyvattanac Na
+
+
 ## 1. Overview
 
 In this lab, you will design and implement a multi-sensor IoT monitoring system using an **ESP32** microcontroller running **MicroPython** (via Thonny IDE). The system integrates four hardware sensors:
