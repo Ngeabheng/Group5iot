@@ -50,7 +50,7 @@ Before sending sensor data across the network, the ESP32 performs edge logic pro
 
 ---
 
-### Wiring Diagram
+### Wiring 
 
 ![Component Setup](wiring.jpeg)
 
