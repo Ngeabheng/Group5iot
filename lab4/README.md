@@ -52,7 +52,7 @@ Before sending sensor data across the network, the ESP32 performs edge logic pro
 
 ### Wiring Diagram
 
-![Component Setup](./screenshot/component.png)
+![Component Setup](wiring.jpeg)
 
 ### Pin Connections
 
@@ -85,70 +85,6 @@ Before sending sensor data across the network, the ESP32 performs edge logic pro
 3. **Fever Flag Calculation**: The MLX90614 object temperature is compared against $32.5^\circ\text{C}$ to set a binary `fever_flag` ($0$ or $1$).
 4. **Environment & Time Tracking**: Atmospheric pressure (hPa) and altitude (meters) are retrieved from the BMP280, alongside ISO-formatted timestamp data from the DS3231 RTC.
 5. **Data Transmission**: A structured JSON payload is posted to Node-RED via HTTP POST, written to InfluxDB, and displayed on Grafana.
-
----
-
-### JSON Payload Structure
-
-```json
-{
-  "timestamp": "2026-11-10T15:30:00",
-  "gas_raw": 1850,
-  "gas_avg": 1870.0,
-  "risk_level": "SAFE",
-  "body_temp": 36.5,
-  "fever_flag": 0,
-  "room_temp": 24.5,
-  "pressure": 1013.25,
-  "altitude": 45.2
-}
-```
-
----
-
-### System Architecture & Flowchart
-
-![System Architecture](./screenshot/flow_doagram.png)
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│                            ESP32                             │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │                  MicroPython Runtime                   │  │
-│  │                                                        │  │
-│  │  ┌──────────┐  ┌──────────┐  ┌────────┐  ┌────────┐    │  │
-│  │  │ MLX90614 │  │  BMP280  │  │  MQ-5  │  │ DS3231 │    │  │
-│  │  │  Driver  │  │  Driver  │  │  ADC   │  │ (RTC)  │    │  │
-│  │  └────┬─────┘  └────┬─────┘  └───┬────┘  ────┬───┘    │  │
-│  │       │             │            │           │        │  │
-│  │  ┌────┴─────────────┴────────────┴───────────┴──────┐  │  │
-│  │  │              Edge Logic Processing               │  │  │
-│  │  │  - Moving Average Filter (MQ-5, window=5)        │  │  │
-│  │  │  - Gas Risk Classification (SAFE/WARN/DANGER)    │  │  │
-│  │  │  - Fever Detection Logic (Threshold 32.5°C)      │  │  │
-│  │  │  - JSON Packet Assembly & Formatting             │  │  │
-│  │  └──────────────────────────┬───────────────────────┘  │  │
-│  │                             │ HTTP POST                │  │
-│  └─────────────────────────────┼──────────────────────────┘  │
-└────────────────────────────────┼─────────────────────────────┘
-                                 ▼
-               ┌───────────────────────────────────┐
-               │             Node-RED              │
-               │  HTTP In ──► JSON Parse ──► Influx │
-               └─────────────────┬─────────────────┘
-                                 │
-                                 ▼
-               ┌───────────────────────────────────┐
-               │             InfluxDB              │
-               │    Time-Series Storage (iot_lab4) │
-               └─────────────────┬─────────────────┘
-                                 │
-                                 ▼
-               ┌───────────────────────────────────┐
-               │              Grafana              │
-               │     Multi-Panel Monitoring UI     │
-               └───────────────────────────────────┘
-```
 
 ---
 
@@ -231,29 +167,6 @@ FEVER_THRESH    = 32.5  # degrees Celsius
 
 **Objective**: Interface the MQ-5 gas sensor to ESP32 ADC (12-bit, range 0–4095), implement a 5-sample moving average buffer, output raw and filtered values to serial, and transmit the smoothed value to Node-RED.
 
-#### MicroPython Implementation:
-
-```python
-from machine import ADC, Pin
-
-adc = ADC(Pin(33))
-adc.atten(ADC.ATTN_11DB)
-adc.width(ADC.WIDTH_12BIT)
-
-gas_buffer = []
-WINDOW_SIZE = 5
-
-def calculate_moving_average(new_sample):
-    gas_buffer.append(new_sample)
-    if len(gas_buffer) > WINDOW_SIZE:
-        gas_buffer.pop(0)
-    return sum(gas_buffer) / len(gas_buffer)
-
-# Execution loop sampling
-gas_raw = adc.read()
-gas_avg = calculate_moving_average(gas_raw)
-print("Raw ADC:", gas_raw, "| Moving Avg:", gas_avg)
-```
 
 ![Task 1 Evidence](task1.png)
 
@@ -271,23 +184,7 @@ print("Raw ADC:", gas_raw, "| Moving Avg:", gas_avg)
 | **$2100 - 2599$** | `WARNING` | Elevated gas presence detected |
 | **$\ge 2600$** | `DANGER` | High concentration gas hazard |
 
-#### MicroPython Implementation:
-
-```python
-def classify_gas_risk(avg_value):
-    if avg_value < 2100:
-        return "SAFE"
-    elif avg_value < 2600:
-        return "WARNING"
-    else:
-        return "DANGER"
-
-risk_level = classify_gas_risk(gas_avg)
-print("Evaluated Risk Level:", risk_level)
-```
-
 ![Task 2](task2.png)
-
 
 ---
 
@@ -298,24 +195,6 @@ print("Evaluated Risk Level:", risk_level)
 #### Detection Logic Rule:
 $$\text{fever\_flag} = \begin{cases} 1 & \text{if } \text{body\_temp} \ge 32.5^\circ\text{C} \\ 0 & \text{otherwise} \end{cases}$$
 
-#### MicroPython Implementation:
-
-```python
-from machine import I2C, Pin
-import mlx90614
-
-i2c = I2C(0, sda=Pin(21), scl=Pin(22), freq=100000)
-mlx = mlx90614.MLX90614(i2c)
-
-FEVER_THRESHOLD = 32.5
-
-def detect_fever(object_temp):
-    return 1 if object_temp >= FEVER_THRESHOLD else 0
-
-body_temp = mlx.object_temp()
-fever_flag = detect_fever(body_temp)
-print("Body Temp:", body_temp, "°C | Fever Flag:", fever_flag)
-```
 
 ![Task 3 Evidence](task3.png)
 
@@ -325,42 +204,6 @@ print("Body Temp:", body_temp, "°C | Fever Flag:", fever_flag)
 
 **Objective**: Obtain barometric pressure (hPa) and estimated altitude (meters) from the BMP280 module alongside real-time timestamping from the DS3231 RTC. Stream packet data into InfluxDB and build a comprehensive 6-panel Grafana dashboard.
 
-#### Sensor Acquisition & Payload Transmission Code:
-
-```python
-import urequests
-import json
-import bmp280
-import ds3231
-
-bmp = bmp280.BMP280(i2c)
-rtc = ds3231.DS3231(i2c)
-
-pressure = bmp.pressure    # hPa
-altitude = bmp.altitude    # Meters
-dt = rtc.datetime()        # (Year, Month, Day, Weekday, Hour, Min, Sec, Sub-sec)
-
-timestamp = "{:04d}-{:02d}-{:02d}T{:02d}:{:02d}:{:02d}".format(
-    dt[0], dt[1], dt[2], dt[4], dt[5], dt[6]
-)
-
-payload = {
-    "timestamp": timestamp,
-    "gas_raw": gas_raw,
-    "gas_avg": gas_avg,
-    "risk_level": risk_level,
-    "body_temp": body_temp,
-    "fever_flag": fever_flag,
-    "room_temp": bmp.temperature,
-    "pressure": pressure,
-    "altitude": altitude
-}
-
-response = urequests.post(NODE_RED_URL, json=payload)
-response.close()
-```
-
----
 
 #### Grafana Dashboard Panel Configuration
 
